@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+// ✅ Default consent
+gtag('consent', 'default', {
+  'analytics_storage': 'denied',
+  'ad_storage': 'denied'
+});
+
+// ✅ EARLY CONSENT RESTORE (FIX ⭐)
+const analytics = localStorage.getItem("analyticsConsent");
+const ads = localStorage.getItem("adsConsent");
+
+if (analytics !== null && ads !== null) {
+  gtag('consent', 'update', {
+    analytics_storage: analytics === "true" ? 'granted' : 'denied',
+    ad_storage: ads === "true" ? 'granted' : 'denied'
+  });
+}
+</script>
+
+<!-- Google Tag Manager -->
+<script>
+(function(w,d,s,l,i){
+  w[l]=w[l]||[];
+  w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+  var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+  j.async=true;
+  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+  f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KRKZ2WJP');
+</script>
+
+<title>Books</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- GTM noscript -->
+<noscript>
+<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRKZ2WJP"
+height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+
+<header>
+  <div class="container nav">
+    <h1>📚 Books</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Books</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>Books Collection</h2>
+
+    <div class="grid">
+      <div class="card">
+        <img src="thinkandgrow.png">
+        <h3>Think and Grow Rich</h3>
+        <button onclick="viewProduct({
+          name: 'Think and Grow Rich',
+          price: 1000,
+          img: 'thinkandgrow.png'
+        })">View</button>
+        <button onclick="addToCart({
+  name: 'Think and Grow Rich',
+  price: 1000
+})">Add to Cart</button>
+      </div>
+
+      <div class="card">
+        <img src="ikigai.jpg">
+        <h3>Ikigai</h3>
+        <button onclick="viewProduct({
+          name: 'Ikigai',
+          price: 299,
+          img: 'ikigai.jpg'
+        })">View</button>
+        <button onclick="addToCart({
+  name: 'Ikigai',
+  price: 299
+})">Add to Cart</button>
+      </div>
+
+      <div class="card">
+        <img src="alchemist.jpg">
+        <h3>The Alchemist</h3>
+        <button onclick="viewProduct({
+          name: 'The Alchemist',
+          price: 500,
+          img: 'alchemist.jpg'
+        })">View</button>
+        <button onclick="addToCart({
+  name: 'The Alchemist',
+  price: 500
+})">Add to Cart</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONSENT BANNER -->
+<div id="consent-banner" style="
+position: fixed;
+bottom: 0;
+width: 100%;
+background: #222;
+color: #fff;
+padding: 15px;
+z-index: 9999;
+">
+
+  <p>Manage your cookie preferences</p>
+
+  <label>
+    <input type="checkbox" id="analyticsConsent">
+    Enable Analytics Cookies
+  </label><br>
+
+  <label>
+    <input type="checkbox" id="adsConsent">
+    Enable Advertising Cookies
+  </label><br><br>
+
+  <button onclick="acceptAll()">Accept All</button>
+  <button onclick="rejectAll()">Reject All</button>
+  <button onclick="savePreferences()">Save Preferences</button>
+
+</div>
+
+<footer>
+  <p>© 2026 BookStore</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
