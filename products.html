@@ -55,8 +55,6 @@ gtag('config', 'G-F3B00ZEY0V');
 
 gtag('event', 'page_view', {
 
-  page_title: document.title,
-
   page_location: window.location.href,
 
   page_path: window.location.pathname
@@ -246,8 +244,6 @@ function trackViewItem(product){
 
     items: [{
 
-      item_id: product.name.replace(/\s+/g, '_'),
-
       item_name: product.name,
 
       item_category: 'Books',
@@ -279,8 +275,6 @@ function trackAddToCart(product){
     value: product.price,
 
     items: [{
-
-      item_id: product.name.replace(/\s+/g, '_'),
 
       item_name: product.name,
 
