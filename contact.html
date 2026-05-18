@@ -2,83 +2,127 @@
 <html>
 <head>
 
+<!-- CONSENT MODE -->
 <script>
+
 window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
+
+function gtag(){
+  dataLayer.push(arguments);
+}
 
 // ✅ Default consent
 gtag('consent', 'default', {
-  'analytics_storage': 'denied',
-  'ad_storage': 'denied'
+  analytics_storage: 'denied',
+  ad_storage: 'denied'
 });
 
-// ✅ EARLY CONSENT RESTORE (FIX ⭐)
+// ✅ EARLY CONSENT RESTORE
 const analytics = localStorage.getItem("analyticsConsent");
 const ads = localStorage.getItem("adsConsent");
 
 if (analytics !== null && ads !== null) {
+
   gtag('consent', 'update', {
+
     analytics_storage: analytics === "true" ? 'granted' : 'denied',
+
     ad_storage: ads === "true" ? 'granted' : 'denied'
+
   });
+
 }
+
 </script>
 
-<!-- Google Tag Manager -->
+<!-- GOOGLE ANALYTICS GTAG.JS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F3B00ZEY0V"></script>
+
 <script>
-(function(w,d,s,l,i){
-  w[l]=w[l]||[];
-  w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-  var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-  j.async=true;
-  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-  f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KRKZ2WJP');
+
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+  dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+
+gtag('config', 'G-F3B00ZEY0V');
+
+
+// ✅ PAGEVIEW EVENT
+
+gtag('event', 'page_view', {
+
+  page_title: document.title,
+
+  page_location: window.location.href,
+
+  page_path: window.location.pathname
+
+});
+
 </script>
 
 <title>Contact</title>
+
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<!-- GTM noscript -->
-<noscript>
-<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRKZ2WJP"
-height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-
 <header>
+
   <div class="container nav">
+
     <h1>Contact Us</h1>
+
     <nav>
       <a href="index.html">Home</a>
       <a href="products.html">Books</a>
     </nav>
+
   </div>
+
 </header>
 
 <section>
+
   <div class="container">
+
     <h2>Get in Touch</h2>
 
-    <form onsubmit="submitForm(event)">
+    <!-- FORM SUBMIT -->
+
+    <form onsubmit="submitFormTracking(event)">
+
       <input type="text" id="userName" placeholder="Name" required>
+
       <input type="email" id="userEmail" placeholder="Email" required>
+
       <button type="submit">Submit</button>
+
     </form>
 
   </div>
 
-  <button onclick="trackBtn1()">Button 1</button>
 
-<button onclick="trackBtn2()">Button 2</button>
-  
+  <!-- CTA BUTTONS -->
+
+  <button onclick="trackBtn1()">
+    Button 1
+  </button>
+
+  <button onclick="trackBtn2()">
+    Button 2
+  </button>
+
 </section>
 
 <!-- CONSENT BANNER -->
+
 <div id="consent-banner" style="
 position: fixed;
 bottom: 0;
@@ -94,21 +138,29 @@ z-index: 9999;
   <label>
     <input type="checkbox" id="analyticsConsent">
     Enable Analytics Cookies
-  </label><br>
+  </label>
+
+  <br>
 
   <label>
     <input type="checkbox" id="adsConsent">
     Enable Advertising Cookies
-  </label><br><br>
+  </label>
+
+  <br><br>
 
   <button onclick="acceptAll()">Accept All</button>
+
   <button onclick="rejectAll()">Reject All</button>
+
   <button onclick="savePreferences()">Save Preferences</button>
 
 </div>
 
 <footer>
+
   <p>© 2026 BookStore</p>
+
 </footer>
 
 <script src="script.js"></script>
@@ -116,35 +168,72 @@ z-index: 9999;
 <script>
 
 // ===============================
-// CTA BUTTON TRACKING
+// FORM SUBMIT TRACKING
 // ===============================
 
-function trackBtn1() {
+function submitFormTracking(event){
 
-  dataLayer.push({
-    event: "btn1",
-    cta_text: "Explore Books",
+  event.preventDefault();
+
+  const userName = document.getElementById("userName").value;
+
+  const userEmail = document.getElementById("userEmail").value;
+
+
+  // ✅ LEAD EVENT
+
+  gtag('event', 'generate_lead', {
+
+    form_name: 'Contact Form',
+
+    user_name: userName,
+
+    user_email: userEmail
+
+  });
+
+  // Existing form function
+  submitForm(event);
+
+}
+
+
+// ===============================
+// CTA BUTTON 1 TRACKING
+// ===============================
+
+function trackBtn1(){
+
+  gtag('event', 'btn1', {
+
+    cta_text: 'Explore Books'
+
   });
 
   console.log("btn1 fired");
+
 }
 
 
-function trackBtn2() {
+// ===============================
+// CTA BUTTON 2 TRACKING
+// ===============================
 
-  dataLayer.push({
-    event: "btn2",
-    cta_text: "Buy Now",
-    section_name: "Hero Banner"
+function trackBtn2(){
+
+  gtag('event', 'btn2', {
+
+    cta_text: 'Buy Now',
+
+    section_name: 'Hero Banner'
+
   });
 
   console.log("btn2 fired");
+
 }
 
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
