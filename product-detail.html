@@ -2,79 +2,126 @@
 <html>
 <head>
 
+<!-- CONSENT MODE -->
 <script>
+
 window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
+
+function gtag(){
+  dataLayer.push(arguments);
+}
 
 // ✅ Default consent
 gtag('consent', 'default', {
-  'analytics_storage': 'denied',
-  'ad_storage': 'denied'
+  analytics_storage: 'denied',
+  ad_storage: 'denied'
 });
 
-// ✅ EARLY CONSENT RESTORE (FIX ⭐)
+// ✅ EARLY CONSENT RESTORE
 const analytics = localStorage.getItem("analyticsConsent");
 const ads = localStorage.getItem("adsConsent");
 
 if (analytics !== null && ads !== null) {
+
   gtag('consent', 'update', {
+
     analytics_storage: analytics === "true" ? 'granted' : 'denied',
+
     ad_storage: ads === "true" ? 'granted' : 'denied'
+
   });
+
 }
+
 </script>
 
-<!-- Google Tag Manager -->
+<!-- GOOGLE ANALYTICS GTAG.JS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F3B00ZEY0V"></script>
+
 <script>
-(function(w,d,s,l,i){
-  w[l]=w[l]||[];
-  w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-  var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-  j.async=true;
-  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-  f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KRKZ2WJP');
+
+window.dataLayer = window.dataLayer || [];
+
+function gtag(){
+  dataLayer.push(arguments);
+}
+
+gtag('js', new Date());
+
+gtag('config', 'G-F3B00ZEY0V');
+
+
+// ✅ PAGEVIEW EVENT
+
+gtag('event', 'page_view', {
+
+  page_title: document.title,
+
+  page_location: window.location.href,
+
+  page_path: window.location.pathname
+
+});
+
 </script>
 
 <title>Book Detail</title>
+
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-<!-- GTM noscript -->
-<noscript>
-<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRKZ2WJP"
-height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
-
 <header>
+
   <div class="container nav">
+
     <h1>📚 Book Detail</h1>
+
     <nav>
       <a href="index.html">Home</a>
       <a href="products.html">Books</a>
     </nav>
+
   </div>
+
 </header>
 
 <section>
+
   <div class="container">
+
     <div class="product">
+
       <img id="product-img">
+
       <div>
+
         <h2 id="product-name"></h2>
+
         <p id="product-price"></p>
-        <button onclick="addToCart()">Add to Cart</button>
-        <button onclick="buyNow()">Buy Now</button>
+
+        <!-- ADD TO CART EVENT -->
+        <button onclick="trackAddToCart()">
+          Add to Cart
+        </button>
+
+        <!-- PURCHASE EVENT -->
+        <button onclick="trackPurchase()">
+          Buy Now
+        </button>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
 <!-- CONSENT BANNER -->
+
 <div id="consent-banner" style="
 position: fixed;
 bottom: 0;
@@ -90,34 +137,160 @@ z-index: 9999;
   <label>
     <input type="checkbox" id="analyticsConsent">
     Enable Analytics Cookies
-  </label><br>
+  </label>
+
+  <br>
 
   <label>
     <input type="checkbox" id="adsConsent">
     Enable Advertising Cookies
-  </label><br><br>
+  </label>
+
+  <br><br>
 
   <button onclick="acceptAll()">Accept All</button>
+
   <button onclick="rejectAll()">Reject All</button>
+
   <button onclick="savePreferences()">Save Preferences</button>
 
 </div>
 
 <footer>
+
   <p>© 2026 BookStore</p>
+
 </footer>
 
 <script src="script.js"></script>
 
 <script>
-// ✅ PRODUCT DATA LOAD (CORRECT)
+
+// ✅ PRODUCT DATA LOAD + VIEW ITEM EVENT
+
 window.addEventListener("DOMContentLoaded", function () {
+
   const params = new URLSearchParams(window.location.search);
 
-  document.getElementById("product-name").innerText = params.get("name");
-  document.getElementById("product-price").innerText = "Price: " + params.get("price");
-  document.getElementById("product-img").src = params.get("img");
+  const productName = params.get("name");
+
+  const productPrice = parseInt(params.get("price"));
+
+  const productImg = params.get("img");
+
+
+  document.getElementById("product-name").innerText = productName;
+
+  document.getElementById("product-price").innerText = "Price: ₹" + productPrice;
+
+  document.getElementById("product-img").src = productImg;
+
+
+  // ✅ VIEW ITEM EVENT
+
+  gtag('event', 'view_item', {
+
+    currency: 'INR',
+
+    value: productPrice,
+
+    items: [{
+
+      item_id: productName.replace(/\s+/g, '_'),
+
+      item_name: productName,
+
+      item_category: 'Books',
+
+      price: productPrice,
+
+      quantity: 1
+
+    }]
+
+  });
+
 });
+
+
+// ✅ ADD TO CART EVENT
+
+function trackAddToCart(){
+
+  const productName = document.getElementById("product-name").innerText;
+
+  const productPrice = parseInt(
+    document.getElementById("product-price")
+    .innerText
+    .replace("Price: ₹","")
+  );
+
+  gtag('event', 'add_to_cart', {
+
+    currency: 'INR',
+
+    value: productPrice,
+
+    items: [{
+
+      item_id: productName.replace(/\s+/g, '_'),
+
+      item_name: productName,
+
+      item_category: 'Books',
+
+      price: productPrice,
+
+      quantity: 1
+
+    }]
+
+  });
+
+  addToCart();
+
+}
+
+
+// ✅ PURCHASE EVENT
+
+function trackPurchase(){
+
+  const productName = document.getElementById("product-name").innerText;
+
+  const productPrice = parseInt(
+    document.getElementById("product-price")
+    .innerText
+    .replace("Price: ₹","")
+  );
+
+  gtag('event', 'purchase', {
+
+    transaction_id: 'TXN_' + new Date().getTime(),
+
+    currency: 'INR',
+
+    value: productPrice,
+
+    items: [{
+
+      item_id: productName.replace(/\s+/g, '_'),
+
+      item_name: productName,
+
+      item_category: 'Books',
+
+      price: productPrice,
+
+      quantity: 1
+
+    }]
+
+  });
+
+  buyNow();
+
+}
 
 </script>
 
