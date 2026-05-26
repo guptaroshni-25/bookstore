@@ -207,3 +207,88 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
 });
+// ======================================
+// MP HIT DIRECTLY FROM FRONTEND
+// ======================================
+
+document.getElementById("exploreBtn").addEventListener("click", function () {
+
+    // ======================================
+    // FETCH REALTIME CLIENT ID
+    // ======================================
+
+    gtag('get', 'G-F3B00ZEY0V', 'client_id', function(clientId) {
+
+        console.log("Realtime Client ID:", clientId);
+
+
+        // ======================================
+        // MP PAYLOAD
+        // ======================================
+
+        const payload = {
+
+            client_id: clientId,
+
+            user_properties: {
+
+                custom_client_id: {
+
+                    value: clientId + "."
+
+                }
+
+            },
+
+            events: [
+
+                {
+
+                    name: "button_clicks_mp",
+
+                    params: {
+
+                        button_name: "Explore Books",
+
+                        section_name: "Homepage",
+
+                        category: "Books",
+
+                        debug_mode: 1
+
+                    }
+
+                }
+
+            ]
+
+        };
+
+
+        // ======================================
+        // SEND MP HIT TO GA4
+        // ======================================
+
+        fetch('https://www.google-analytics.com/mp/collect?measurement_id=G-F3B00ZEY0V&api_secret=37jkdMqARC-kudyCaMWdDQ', {
+
+            method: 'POST',
+
+            body: JSON.stringify(payload)
+
+        })
+
+        .then(response => {
+
+            console.log("MP Hit Sent Successfully");
+
+        })
+
+        .catch(error => {
+
+            console.log(error);
+
+        });
+
+    });
+
+});
