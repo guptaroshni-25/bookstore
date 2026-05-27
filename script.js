@@ -221,71 +221,138 @@ document.getElementById("exploreBtn").addEventListener("click", function () {
 
         console.log("Realtime Client ID:", clientId);
 
-
         // ======================================
-        // MP PAYLOAD
+        // FETCH REALTIME SESSION ID
         // ======================================
 
-        const payload = {
+        gtag('get', 'G-F3B00ZEY0V', 'session_id', function(sessionId) {
 
-            client_id: clientId,
+            console.log("Realtime Session ID:", sessionId);
 
-            user_properties: {
+            // ======================================
+            // GENERATE TIMESTAMP
+            // ======================================
 
-                custom_client_id: {
+            const timestampMicros = Date.now() * 1000;
 
-                    value: clientId + "."
+            console.log("Timestamp Micros:", timestampMicros);
 
-                }
+            // ======================================
+            // MP PAYLOAD
+            // ======================================
 
-            },
+            const payload = {
 
-            events: [
+                // ======================================
+                // CLIENT ID
+                // ======================================
 
-                {
+                client_id: clientId,
 
-                    name: "button_clicks_mp",
+                // ======================================
+                // USER PROPERTIES
+                // ======================================
 
-                    params: {
+                user_properties: {
 
-                        button_name: "Explore Books",
+                    custom_client_id: {
 
-                        section_name: "Homepage",
-
-                        category: "Books",
-
-                        debug_mode: 1
+                        value: clientId + "."
 
                     }
 
+                },
+
+                // ======================================
+                // EVENTS ARRAY
+                // ======================================
+
+                events: [
+
+                    {
+
+                        // ======================================
+                        // EVENT NAME
+                        // ======================================
+
+                        name: "button_clicks_mp",
+
+                        // ======================================
+                        // EVENT TIMESTAMP
+                        // ======================================
+
+                        timestamp_micros: timestampMicros,
+
+                        // ======================================
+                        // EVENT PARAMETERS
+                        // ======================================
+
+                        params: {
+
+                            button_name: "Explore Books",
+
+                            section_name: "Homepage",
+
+                            category: "Books",
+
+                            // ======================================
+                            // SESSION STITCHING
+                            // ======================================
+
+                            session_id: sessionId,
+
+                            // ======================================
+                            // ENGAGEMENT
+                            // ======================================
+
+                            engagement_time_msec: 100,
+
+                            // ======================================
+                            // DEBUG MODE
+                            // ======================================
+
+                            debug_mode: 1
+
+                        }
+
+                    }
+
+                ]
+
+            };
+
+            // ======================================
+            // CHECK PAYLOAD IN CONSOLE
+            // ======================================
+
+            console.log("Final MP Payload:", payload);
+
+            // ======================================
+            // SEND MP HIT TO GA4
+            // ======================================
+
+            fetch(
+                'https://www.google-analytics.com/mp/collect?measurement_id=G-F3B00ZEY0V&api_secret=37jkdMqARC-kudyCaMWdDQ',
+                {
+
+                    method: 'POST',
+
+                    body: JSON.stringify(payload)
+
                 }
+            )
 
-            ]
+            .then(response => {
 
-        };
+                console.log("MP Hit Sent Successfully ✅");
 
+            })
 
-        // ======================================
-        // SEND MP HIT TO GA4
-        // ======================================
+            .catch(error => {
 
-        fetch('https://www.google-analytics.com/mp/collect?measurement_id=G-F3B00ZEY0V&api_secret=37jkdMqARC-kudyCaMWdDQ', {
+                console.log("MP Error ❌", error);
 
-            method: 'POST',
-
-            body: JSON.stringify(payload)
-
-        })
-
-        .then(response => {
-
-            console.log("MP Hit Sent Successfully");
-
-        })
-
-        .catch(error => {
-
-            console.log(error);
+            });
 
         });
 
